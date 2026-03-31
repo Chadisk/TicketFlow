@@ -1,132 +1,66 @@
-# TicketFlow - Full-Stack Helpdesk Ticket Management System
+# TicketFlow
 
-A modern, scalable helpdesk support ticket management application built with Node.js + Express, PostgreSQL, and React + Vite.
+Full-stack helpdesk ticket management system built as a submission-ready project for job applications.
 
-## 🎯 Features
+TicketFlow combines a Node.js + Express API, PostgreSQL data layer, and a React + Vite frontend into a polished support workflow dashboard. The project is designed to show practical full-stack skills: API design, database migrations, validation, testing, Docker, and a production-style UI.
 
-✅ **Ticket Management**
-- Create tickets with title, description, and contact information
-- Update ticket information and status (pending, accepted, resolved, rejected)
-- List and sort tickets by status, latest update, and creation date
-- Filter tickets by status
-- Kanban board UI for visual workflow management
-- Drag-and-drop to update ticket status
+## Reviewer Notes
 
-✅ **API Features**
-- RESTful API with comprehensive endpoints
-- Input validation with Joi
-- Swagger API documentation
-- CORS enabled
-- Error handling middleware
+- Ticket intake, update, filtering, sorting, and kanban workflows are fully implemented.
+- The backend is structured with routes, services, models, validation, and migrations.
+- The frontend includes responsive UI, drag-and-drop interaction, theme support, and a cleaner dashboard experience.
+- Docker Compose is included so the app can be run locally with minimal setup.
 
-✅ **Frontend**
-- SPA built with React + Vite
-- Responsive design with Tailwind CSS
-- Shadcn/ui component library
-- Real-time form validation
-- Axios for API integration
+## Tech Stack
 
-✅ **Database**
-- PostgreSQL with migrations
-- Proper indexing for performance
-- Timestamps for created and updated records
+- Backend: Node.js, Express, PostgreSQL, Joi, Jest, Supertest
+- Frontend: React 18, Vite, Tailwind CSS, Axios
+- DevOps: Docker, Docker Compose
 
-✅ **Testing & Documentation**
-- Jest unit tests for API endpoints
-- Swagger OpenAPI documentation
-- Comprehensive API docs at `/api-docs`
+## Quick Start
 
-✅ **Containerization**
-- Docker multi-stage builds
-- docker-compose for local development
-- PostgreSQL service included
-
----
-
-## 🛠️ Tech Stack
-
-**Backend:**
-- Node.js + Express.js
-- PostgreSQL
-- Joi (validation)
-- Jest + Supertest (testing)
-- Swagger/OpenAPI
-
-**Frontend:**
-- React 18
-- Vite
-- Tailwind CSS
-- Shadcn/ui components
-- Axios
-
-**DevOps:**
-- Docker & Docker Compose
-- Node.js 18 Alpine
-
----
-
-## 📋 Prerequisites
-
-- Node.js 18+
-- Docker & Docker Compose
-- PostgreSQL 15+ (or use Docker)
-
----
-
-## 🚀 Quick Start
-
-### Option 1: Using Docker Compose (Recommended)
+### Docker Compose
 
 ```bash
-# Clone the repository
-git clone <repo-url>
-cd TicketFlow
-
-# Start all services (PostgreSQL, Backend, Frontend)
 docker-compose up
-
-# The application will be available at:
-# - Frontend: http://localhost:3000
-# - Backend API: http://localhost:5000
-# - API Docs: http://localhost:5000/api-docs
 ```
 
-### Option 2: Local Development Setup
+After startup:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+- API Docs: http://localhost:5000/api-docs
 
-#### Backend Setup
+### Local Development
+
+Backend:
 
 ```bash
 cd backend
-
-# Copy environment file
 cp .env.example .env
-
-# Install dependencies
 npm install
-
-# Run database migrations
 npm run migrate
-
-# Start development server
 npm run dev
-
-# Server runs on http://localhost:5000
-# API docs available at http://localhost:5000/api-docs
 ```
 
-#### Frontend Setup
+Frontend:
 
 ```bash
 cd frontend
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
-
-# Application runs on http://localhost:3000
 ```
+
+## Core Features
+
+- Create, update, and view tickets
+- Filter and sort by status, creation date, and latest update
+- Kanban board with drag-and-drop status updates
+- PostgreSQL schema with migrations and indexes
+- Backend tests with Jest and Supertest
+- Swagger API documentation
+- Dockerized local setup
+
+---
 
 ---
 
