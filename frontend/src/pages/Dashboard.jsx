@@ -84,6 +84,9 @@ export const Dashboard = ({ theme = 'light', lang = 'en', copy, onToggleTheme, o
         <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl space-y-5">
+              <div className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] ${isDark ? 'bg-stone-900/70 text-stone-300 ring-1 ring-stone-700' : 'bg-white/80 text-stone-500 ring-1 ring-stone-200'}`}>
+                SUPPORT OPERATIONS CENTER
+              </div>
               <div className="space-y-3">
                 <h1 className={`text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl ${isDark ? 'text-stone-50' : 'text-stone-950'}`}>
                     {t.hero.title}
