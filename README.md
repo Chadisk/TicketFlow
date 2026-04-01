@@ -2,14 +2,15 @@
 
 Full-stack helpdesk ticket management system built as a submission-ready project for job applications.
 
-TicketFlow combines a Node.js + Express API, PostgreSQL data layer, and a React + Vite frontend into a polished support workflow dashboard. The project is designed to show practical full-stack skills: API design, database migrations, validation, testing, Docker, and a production-style UI.
+TicketFlow combines a Node.js + Express API, PostgreSQL data layer, and a React + Vite frontend into a polished support workflow dashboard. It was built to demonstrate practical full-stack skills: API design, database migrations, validation, testing, Docker, and production-style UI work.
 
-## Reviewer Notes
+## Submission Highlights
 
 - Ticket intake, update, filtering, sorting, and kanban workflows are fully implemented.
 - The backend is structured with routes, services, models, validation, and migrations.
-- The frontend includes responsive UI, drag-and-drop interaction, theme support, and a cleaner dashboard experience.
-- Docker Compose is included so the app can be run locally with minimal setup.
+- The frontend includes responsive UI, drag-and-drop interaction, theme support, and a polished dashboard.
+- Docker Compose is included so the project can be run locally with minimal setup.
+- Backend test suite currently covers 5 realistic API cases.
 
 ## Tech Stack
 
@@ -59,8 +60,6 @@ npm run dev
 - Backend tests with Jest and Supertest
 - Swagger API documentation
 - Dockerized local setup
-
----
 
 ---
 
@@ -152,7 +151,7 @@ npm test -- --coverage
 ```
 
 **Test Files:**
-- `__tests__/tickets.test.js` - API endpoint tests
+- `__tests__/tickets.test.js` - 5 realistic API test cases covering list, filter, read, create, and update flows
 
 ---
 
