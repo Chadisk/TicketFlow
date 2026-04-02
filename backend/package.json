@@ -10,6 +10,7 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles",
     "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "migrate": "node database/migrate.js",
+    "seed": "node database/seed.js",
     "migrate:down": "node database/migrate-down.js"
   },
   "dependencies": {

@@ -1,69 +1,133 @@
 # TicketFlow
 
-TicketFlow is a full-stack helpdesk ticket management system built as a job-application-ready project. It combines an Express API, PostgreSQL migrations, a React + Vite dashboard, Docker Compose, and Swagger documentation to demonstrate end-to-end product delivery.
+TicketFlow is a full-stack helpdesk ticket management system built with Node.js, Express, PostgreSQL, React, Vite, Docker, and Swagger. The project is structured like a realistic job-application submission: it includes a working backend API, a polished frontend dashboard, database migrations, Docker Compose, and automated tests.
 
-## Setup
+## 1. Prerequisites
 
-### Prerequisites
+Install these tools before running the project:
 
-- Node.js 18+
-- Docker and Docker Compose
+- Node.js 18 or newer
+- npm, which is included with Node.js
+- Docker Desktop
+- Docker Compose
 
-### Docker Compose
+### Install Node.js on Windows
 
-```bash
+The simplest option is to download the current LTS release from the official site:
+
+```text
+https://nodejs.org/
+```
+
+If you prefer `winget`, you can install Node.js LTS with:
+
+```powershell
+winget install OpenJS.NodeJS.LTS
+```
+
+After installation, close and reopen PowerShell, then verify the installation:
+
+```powershell
+node -v
+npm -v
+```
+
+## 2. Project Setup
+
+Open a terminal in the repository root, then install dependencies.
+
+### Backend setup
+
+```powershell
+cd backend
+npm install
+copy .env.example .env
+```
+
+To load sample ticket cards manually after migrations, run:
+
+```powershell
+cd backend
+npm run seed
+```
+
+The backend `.env` file uses these values by default:
+
+```env
+NODE_ENV=development
+PORT=5000
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=ticketflow
+DB_USER=postgres
+DB_PASSWORD=postgres
+```
+
+### Frontend setup
+
+```powershell
+cd frontend
+npm install
+```
+
+## 3. Run the Project
+
+### Run with Docker
+
+This starts PostgreSQL, the backend API, and the frontend together:
+
+```powershell
 docker compose up --build
 ```
 
-This starts:
+Open these URLs in your browser:
 
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:5000
 - Swagger UI: http://localhost:5000/api-docs
 
-### Local Development
+On first run, the backend seeds sample ticket cards so the dashboard shows realistic data immediately.
+
+### Run locally without Docker
 
 Backend:
 
-```bash
+```powershell
 cd backend
-npm install
-cp .env.example .env
 npm run migrate
 npm run dev
 ```
 
 Frontend:
 
-```bash
+```powershell
 cd frontend
-npm install
 npm run dev
 ```
 
-## Run
+## 4. Run Tests
 
-Backend tests:
+### Backend tests
 
-```bash
+```powershell
 cd backend
 npm test
 ```
 
-Frontend build:
+### Watch mode
 
-```bash
-cd frontend
-npm run build
+```powershell
+cd backend
+npm run test:watch
 ```
 
-Swagger UI is available once the backend is running at:
+If you run tests inside Docker, use:
 
-```text
-http://localhost:5000/api-docs
+```powershell
+docker compose exec backend npm test
 ```
 
-## API Overview
+## 5. API Overview
 
 Base URL:
 
@@ -73,60 +137,58 @@ http://localhost:5000/api
 
 Endpoints:
 
-- `GET /tickets` - list tickets, with optional `status` and `sortBy` query parameters.
-- `GET /tickets/:id` - fetch a single ticket by ID.
+- `GET /tickets` - list tickets with optional filtering and sorting.
+- `GET /tickets/:id` - fetch a single ticket.
 - `POST /tickets` - create a new ticket.
-- `PATCH /tickets/:id` - update a ticket title, description, or status.
-- `GET /health` - simple health check endpoint.
+- `PATCH /tickets/:id` - update a ticket.
+- `GET /health` - health check.
 
-Supported ticket statuses:
+Query parameters for `GET /tickets`:
 
-- `pending`
-- `accepted`
-- `resolved`
-- `rejected`
+- `status` - filter by `pending`, `accepted`, `resolved`, or `rejected`
+- `sortBy` - sort by ticket date fields supported by the API
 
-Swagger is generated from the route annotations in the backend and serves the live API contract at `/api-docs`.
+Swagger UI is generated from the backend routes and is available at `/api-docs`.
 
-## Architecture
+## 6. Architecture
 
-TicketFlow uses a simple layered architecture in the backend and a component-based architecture in the frontend.
+TicketFlow uses a layered backend and a component-based frontend.
 
-Backend flow:
+### Backend
 
-- `src/routes/tickets.js` handles HTTP requests and response codes.
-- `src/services/ticketService.js` contains validation and business rules.
-- `src/models/ticketModel.js` runs PostgreSQL queries.
-- `database/migrations/001_create_tickets.sql` defines the schema and indexes.
-- `src/app.js` wires the Express app, CORS, JSON parsing, health check, and Swagger UI.
-- `src/server.js` starts the HTTP server.
+- `backend/src/app.js` creates the Express app, enables CORS and JSON parsing, and mounts Swagger UI.
+- `backend/src/server.js` starts the HTTP server.
+- `backend/src/routes/tickets.js` handles request and response flow for ticket endpoints.
+- `backend/src/services/ticketService.js` contains validation and business rules.
+- `backend/src/models/ticketModel.js` contains PostgreSQL queries.
+- `backend/database/migrations/001_create_tickets.sql` creates the schema and indexes.
 
-Frontend flow:
+### Frontend
 
-- `src/App.jsx` manages theme and language state.
-- `src/pages/Dashboard.jsx` composes the main dashboard view.
-- `src/components/*` provides reusable UI primitives and ticket-specific components.
-- `src/hooks/useTickets.js` fetches and mutates tickets through the API client in `src/services/api.js`.
+- `frontend/src/App.jsx` manages theme and language state.
+- `frontend/src/pages/Dashboard.jsx` composes the dashboard.
+- `frontend/src/components/` contains reusable UI and ticket UI components.
+- `frontend/src/hooks/useTickets.js` handles API calls and ticket state.
+- `frontend/src/services/api.js` configures the API client.
 
-Data flow:
+### Data flow
 
-- Users create or update tickets from the dashboard.
-- The frontend sends API requests to the backend.
-- The backend validates input, persists data in PostgreSQL, and returns JSON.
-- The dashboard renders the latest ticket state, filters, and kanban board.
+1. The user creates, updates, filters, or drags tickets in the dashboard.
+2. The frontend sends requests to the backend API.
+3. The backend validates the payload and persists data in PostgreSQL.
+4. The frontend renders the latest ticket state and kanban board.
 
-## Testing
+## 7. Testing Notes
 
-Backend test suite:
+The backend test suite includes 5 realistic API cases covering:
 
-```bash
-cd backend
-npm test
-```
+- list tickets
+- filter tickets
+- get a single ticket
+- create a ticket
+- update a ticket
 
-Current coverage includes 5 realistic API cases covering list, filter, read, create, and update flows.
-
-## Project Structure
+## 8. Project Structure
 
 ```text
 TicketFlow/

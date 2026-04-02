@@ -37,7 +37,7 @@ services:
     volumes:
       - ./backend/src:/app/src
       - ./backend/__tests__:/app/__tests__
-    command: sh -c "npm run migrate && npm run dev"
+    command: sh -c "npm run migrate && npm run seed && npm run dev"
 
   frontend:
     build:

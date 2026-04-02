@@ -63,6 +63,16 @@ describe('Tickets API', () => {
       expect(res.body.every((ticket) => ticket.status === 'pending')).toBe(true);
       expect(res.body.map((ticket) => ticket.id)).toEqual(expect.arrayContaining([createdPayrollTicket.id, createdPrinterTicket.id]));
     });
+
+    it('sorts tickets by creation time when requested', async () => {
+      const res = await request(app).get('/api/tickets?sortBy=created');
+
+      expect(res.status).toBe(200);
+      expect(Array.isArray(res.body)).toBe(true);
+      expect(res.body).toHaveLength(2);
+      expect(res.body[0].id).toBe(createdPrinterTicket.id);
+      expect(res.body[1].id).toBe(createdPayrollTicket.id);
+    });
   });
 
   describe('GET /api/tickets/:id', () => {
@@ -76,6 +86,15 @@ describe('Tickets API', () => {
         description: payrollIssue.description,
         contact_info: payrollIssue.contact_info,
         status: 'pending',
+      }));
+    });
+
+    it('returns 404 for a ticket that does not exist', async () => {
+      const res = await request(app).get('/api/tickets/999999');
+
+      expect(res.status).toBe(404);
+      expect(res.body).toEqual(expect.objectContaining({
+        error: 'Ticket not found',
       }));
     });
   });
@@ -101,6 +120,18 @@ describe('Tickets API', () => {
         updated_at: expect.any(String),
       }));
     });
+
+    it('rejects invalid ticket data', async () => {
+      const res = await request(app).post('/api/tickets').send({
+        title: 'Bad',
+        description: 'Short',
+        contact_info: 'not-an-email',
+      });
+
+      expect(res.status).toBe(400);
+      expect(res.body).toHaveProperty('error');
+      expect(res.body.error).toMatch(/title|description|contact_info|email/i);
+    });
   });
 
   describe('PATCH /api/tickets/:id', () => {
@@ -115,6 +146,16 @@ describe('Tickets API', () => {
         status: 'resolved',
         title: payrollIssue.title,
       }));
+    });
+
+    it('rejects an invalid ticket status update', async () => {
+      const res = await request(app)
+        .patch(`/api/tickets/${createdPayrollTicket.id}`)
+        .send({ status: 'done' });
+
+      expect(res.status).toBe(400);
+      expect(res.body).toHaveProperty('error');
+      expect(res.body.error).toMatch(/status/i);
     });
   });
 
