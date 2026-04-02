@@ -542,20 +542,6 @@ Deploy to production
   - REST API
   - PostgreSQL storage
 
-- **v2.0.0** (Planned)
-  - User authentication
-  - Pagination
-  - WebSocket real-time updates
-  - Activity history
-  - Assignee assignment
-  - Comments/notes system
-
-- **v3.0.0** (Future)
-  - Microservices architecture
-  - Advanced reporting
-  - Integration with external services
-  - AI-powered ticket classification
-
 ---
 
 For more details, see the main [README.md](./README.md) and [API_DOCUMENTATION.md](./API_DOCUMENTATION.md).

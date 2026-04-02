@@ -502,6 +502,6 @@ new_ticket = requests.post(f'{BASE_URL}/tickets', json={
 ## Support
 
 For API issues or questions, refer to:
-- GitHub Issues: `<repo-url>/issues`
+- GitHub Issues: `https://github.com/Chadisk/TicketFlow/issues`
 - Documentation: `/api-docs`
 - Main README: `./README.md`
