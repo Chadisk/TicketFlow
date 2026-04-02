@@ -51,6 +51,8 @@ cd backend
 npm run seed
 ```
 
+Before running `npm run seed`, make sure PostgreSQL is already running and the database schema has been created with `npm run migrate`. The seed script connects to `DB_HOST` and inserts rows into the `tickets` table, so it will fail if the database is offline or the migration has not been applied yet.
+
 The backend `.env` file uses these values by default:
 
 ```env

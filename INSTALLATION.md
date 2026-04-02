@@ -132,6 +132,18 @@ npm run migrate
 # Should output: "All migrations completed successfully"
 ```
 
+### Seed Sample Data
+
+```bash
+# From the backend directory, after migrations succeed
+npm run seed
+
+# Should output a message like: "Seeded sample tickets" or
+# "Seed skipped: sample tickets already exist"
+```
+
+Make sure PostgreSQL is running before you run `npm run migrate` or `npm run seed`. The seed script connects to the database defined in `backend/.env` and inserts rows into the `tickets` table, so it will fail if the database is offline or the migration has not been applied yet.
+
 ### Frontend Setup
 
 ```bash
@@ -181,7 +193,7 @@ VITE_API_URL=http://localhost:5000/api
 
 ```bash
 # From the root TicketFlow directory
-docker-compose up
+docker compose up --build
 
 # Access the app:
 # Frontend: http://localhost:3000
@@ -189,11 +201,15 @@ docker-compose up
 # API Docs: http://localhost:5000/api-docs
 ```
 
+When you use Docker Compose, the PostgreSQL container starts first and the backend container runs migrations and seeding automatically before launching the API.
+
 ### Option 2: Running Locally
 
 #### Terminal 1 - Backend
 ```bash
 cd backend
+npm run migrate
+npm run seed
 npm run dev
 
 # Output should show:
@@ -220,6 +236,8 @@ sudo service postgresql start
 
 # Windows - PostgreSQL should auto-start
 ```
+
+If you see an error like ECONNREFUSED on port 5432, PostgreSQL is not running or is listening on a different host/port than the values in backend/.env.
 
 ---
 
@@ -287,6 +305,16 @@ lsof -i :5000
 kill -9 <PID>
 ```
 
+### Issue: "Bind for 0.0.0.0:5432 failed: port is already allocated"
+**Solution:** Stop the PostgreSQL service or container that is already using port 5432, then start Docker Compose again.
+```bash
+# If you previously started the local container
+docker stop ticketflow-db
+
+# Or stop any other PostgreSQL process using 5432 before rerunning:
+docker compose up --build
+```
+
 ### Issue: Migrations fail
 **Solution:** 
 1. Ensure database exists: `createdb -U postgres ticketflow`
@@ -316,12 +344,12 @@ npm test             # Run tests
 
 ### Docker
 ```bash
-docker-compose up                    # Start all services
-docker-compose up -d                 # Start in background
-docker-compose down                  # Stop all services
-docker-compose logs -f backend       # View backend logs
-docker-compose logs -f frontend      # View frontend logs
-docker-compose build --no-cache      # Rebuild images
+docker compose up --build            # Start all services
+docker compose up -d --build         # Start in background
+docker compose down                  # Stop all services
+docker compose logs -f backend       # View backend logs
+docker compose logs -f frontend      # View frontend logs
+docker compose build --no-cache      # Rebuild images
 ```
 
 ---

@@ -70,6 +70,16 @@ const translations = {
       dragToMove: 'Drag to move',
       notAvailable: 'N/A',
     },
+    ticketDetails: {
+      title: 'Ticket details',
+      close: 'Close',
+      status: 'Status',
+      contact: 'Contact email',
+      description: 'Description',
+      createdAt: 'Created at',
+      updatedAt: 'Updated at',
+      ticketId: 'Ticket ID',
+    },
     form: {
       createTitle: 'Create New Ticket',
       editTitle: 'Edit Ticket',
@@ -159,6 +169,16 @@ const translations = {
       ticket: 'Ticket',
       dragToMove: 'ลากเพื่อย้าย',
       notAvailable: 'ไม่ระบุ',
+    },
+    ticketDetails: {
+      title: 'รายละเอียด Ticket',
+      close: 'ปิด',
+      status: 'สถานะ',
+      contact: 'อีเมลติดต่อ',
+      description: 'รายละเอียด',
+      createdAt: 'สร้างเมื่อ',
+      updatedAt: 'อัปเดตเมื่อ',
+      ticketId: 'Ticket ID',
     },
     form: {
       createTitle: 'สร้าง Ticket ใหม่',

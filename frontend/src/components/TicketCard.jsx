@@ -20,20 +20,42 @@ export const Badge = ({ status = 'pending', theme = 'light', copy }) => {
   );
 };
 
-export const TicketCard = ({ ticket, onClick, draggableProps, dragHandleProps, className = '', theme = 'light', copy, lang = 'en' }) => {
+export const TicketCard = ({ ticket, onClick, draggableProps, dragHandleProps, className = '', theme = 'light', copy, lang = 'en', isDragging = false }) => {
   const isDark = theme === 'dark';
   const translations = copy || getTranslations('en');
   const t = translations.card;
   const truncateText = (text, length) => (text.length > length ? `${text.substring(0, length)}...` : text);
   const dateLocale = lang === 'th' ? 'th-TH' : 'en-US';
   const updatedAt = ticket.updated_at ? new Date(ticket.updated_at).toLocaleDateString(dateLocale, { month: 'short', day: 'numeric' }) : translations.card.notAvailable;
+  const handleKeyDown = (event) => {
+    if (!onClick) {
+      return;
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      onClick(event);
+    }
+  };
+
+  const handlePointerUp = (event) => {
+    if (!onClick || isDragging || event.button !== 0) {
+      return;
+    }
+
+    onClick(event);
+  };
 
   return (
     <div
       {...draggableProps}
       {...dragHandleProps}
-      onClick={onClick}
-      className={`group mb-3 cursor-move transition-all duration-200 hover:-translate-y-0.5 ${className}`}
+      onPointerUp={handlePointerUp}
+      onKeyDown={handleKeyDown}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      aria-label={onClick ? `${t.ticket} #${ticket.id}` : undefined}
+      className={`group mb-3 ${onClick ? 'cursor-grab focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/40' : 'cursor-move'} transition-all duration-200 hover:-translate-y-0.5 ${className}`}
     >
       <Card theme={theme} className={`overflow-hidden shadow-sm transition-all duration-200 group-hover:shadow-xl ${isDark ? 'border-stone-700/70 bg-stone-950/80 group-hover:border-amber-700/40 group-hover:shadow-black/20' : 'border-stone-200/70 bg-white/95 group-hover:border-amber-200 group-hover:shadow-stone-900/5'}`}>
         <div className={`h-1 bg-gradient-to-r ${isDark ? 'from-amber-400 via-orange-400 to-rose-500' : 'from-amber-400 via-orange-400 to-rose-300'}`} />

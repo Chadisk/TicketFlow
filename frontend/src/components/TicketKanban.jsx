@@ -3,10 +3,11 @@ import { Card, CardHeader, CardTitle, CardContent } from './Card';
 import { TicketCard } from './TicketCard';
 import { getTranslations } from '../i18n';
 
-export const TicketKanban = ({ tickets, onUpdateTicket, loading = false, theme = 'light', activeStatus = '', copy, lang = 'en' }) => {
+export const TicketKanban = ({ tickets, onUpdateTicket, onTicketClick, loading = false, theme = 'light', activeStatus = '', copy, lang = 'en' }) => {
   const isDark = theme === 'dark';
   const translations = copy || getTranslations('en');
   const t = translations.kanban;
+  const [draggingTicketId, setDraggingTicketId] = useState(null);
   const statuses = [
     { key: 'pending', label: t.statuses.pending, tone: 'from-amber-500 to-yellow-500', border: isDark ? 'border-amber-900/50' : 'border-amber-200', glow: isDark ? 'bg-amber-950/20' : 'bg-amber-50' },
     { key: 'accepted', label: t.statuses.accepted, tone: 'from-orange-500 to-amber-500', border: isDark ? 'border-orange-900/50' : 'border-orange-200', glow: isDark ? 'bg-orange-950/20' : 'bg-orange-50' },
@@ -48,6 +49,7 @@ export const TicketKanban = ({ tickets, onUpdateTicket, loading = false, theme =
   const gridClassName = activeStatus ? 'grid gap-4 md:grid-cols-1' : 'grid gap-4 md:grid-cols-2 xl:grid-cols-4';
 
   const handleDragStart = (e, ticket) => {
+    setDraggingTicketId(ticket.id);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('ticketId', ticket.id);
   };
@@ -82,6 +84,7 @@ export const TicketKanban = ({ tickets, onUpdateTicket, loading = false, theme =
     if (ticket && ticket.status !== status) {
       onUpdateTicket(ticketId, { status });
     }
+    setDraggingTicketId(null);
   };
 
   const handleCardDrop = (e, targetStatus, targetTicketId) => {
@@ -96,10 +99,20 @@ export const TicketKanban = ({ tickets, onUpdateTicket, loading = false, theme =
 
     if (draggedTicket.status === targetStatus) {
       reorderWithinStatus(draggedTicket.id, targetTicketId, targetStatus);
+      setDraggingTicketId(null);
       return;
     }
 
     onUpdateTicket(ticketId, { status: targetStatus });
+    setDraggingTicketId(null);
+  };
+
+  const handleTicketClick = (ticket) => {
+    if (draggingTicketId !== null) {
+      return;
+    }
+
+    onTicketClick?.(ticket);
   };
 
   return (
@@ -136,12 +149,15 @@ export const TicketKanban = ({ tickets, onUpdateTicket, loading = false, theme =
                         theme={theme}
                         lang={lang}
                         ticket={ticket}
+                        onClick={() => handleTicketClick(ticket)}
+                        isDragging={draggingTicketId !== null}
                         copy={translations}
                         draggableProps={{
                           draggable: true,
                           onDragStart: (e) => handleDragStart(e, ticket),
                           onDragOver: handleDragOver,
                           onDrop: (e) => handleCardDrop(e, status.key, ticket.id),
+                          onDragEnd: () => setDraggingTicketId(null),
                         }}
                         className="mb-0"
                       />

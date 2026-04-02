@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { TicketForm } from '../components/TicketForm';
 import { TicketKanban } from '../components/TicketKanban';
+import { TicketDetailModal } from '../components/TicketDetailModal';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/Card';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
@@ -13,6 +14,7 @@ export const Dashboard = ({ theme = 'light', lang = 'en', copy, onToggleTheme, o
   const [sortBy, setSortBy] = useState('updated');
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTicket, setSelectedTicket] = useState(null);
   const { tickets, loading, error, createTicket, updateTicket } = useTickets(statusFilter, sortBy);
   const sortMenuRef = useRef(null);
   const isDark = theme === 'dark';
@@ -303,12 +305,23 @@ export const Dashboard = ({ theme = 'light', lang = 'en', copy, onToggleTheme, o
               copy={t}
               tickets={filteredTickets}
               onUpdateTicket={handleUpdateTicket}
+              onTicketClick={setSelectedTicket}
               loading={loading}
               activeStatus={statusFilter}
             />
           )}
         </div>
       </main>
+
+      {selectedTicket && (
+        <TicketDetailModal
+          ticket={selectedTicket}
+          theme={theme}
+          lang={lang}
+          copy={t}
+          onClose={() => setSelectedTicket(null)}
+        />
+      )}
 
       <footer className={`border-t py-6 backdrop-blur-xl ${isDark ? 'border-stone-800/80 bg-[#120f0c]/80' : 'border-white/60 bg-white/50'}`}>
         <div className={`mx-auto max-w-7xl px-4 text-center text-sm sm:px-6 lg:px-8 ${isDark ? 'text-stone-400' : 'text-stone-500'}`}>
