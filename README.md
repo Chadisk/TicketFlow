@@ -2,6 +2,8 @@
 
 TicketFlow is a full-stack helpdesk ticket management system built with Node.js, Express, PostgreSQL, React, Vite, Docker, and Swagger. The project is structured like a realistic job-application submission: it includes a working backend API, a polished frontend dashboard, database migrations, Docker Compose, and automated tests.
 
+<img src="https://github.com/user-attachments/assets/d3aebd10-ae85-4a05-a184-2847f4f1b025" alt="TicketFlow dashboard screenshot">
+
 ## 1. Prerequisites
 
 Install these tools before running the project:
